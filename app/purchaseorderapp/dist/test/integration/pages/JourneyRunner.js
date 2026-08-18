@@ -1,0 +1,2 @@
+sap.ui.define(["sap/fe/test/JourneyRunner","mithra/app/purchaseorderapp/test/integration/pages/POsList.gen","mithra/app/purchaseorderapp/test/integration/pages/POsObjectPage.gen","mithra/app/purchaseorderapp/test/integration/pages/POItemsObjectPage.gen"],function(e,t,a,r){"use strict";const p=new e({launchUrl:sap.ui.require.toUrl("mithra/app/purchaseorderapp")+"/test/flp.html#app-preview",pages:{onThePOsListGenerated:t,onThePOsObjectPageGenerated:a,onThePOItemsObjectPageGenerated:r},async:true});return p});
+//# sourceMappingURL=JourneyRunner.js.map

@@ -1,0 +1,104 @@
+{
+  "name": "capm",
+  "version": "1.0.0",
+  "dependencies": {
+    "@cap-js/hana": "^2.8.0",
+    "@sap-cloud-sdk/connectivity": "^4.8.0",
+    "@sap-cloud-sdk/http-client": "^4.8.0",
+    "@sap-cloud-sdk/resilience": "^4.8.0",
+    "@sap/cds": "^9.9.3",
+    "@sap/xsenv": "^6.2.2",
+    "@sap/xssec": "^4",
+    "passport": "^0.7.0",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2.4",
+    "@sap-ux/eslint-plugin-fiori-tools": "^10.8.2",
+    "@sap/cds-dk": "^9",
+    "@sap/ux-ui5-tooling": "^1.30.0",
+    "cds-plugin-ui5": "^0.17.0",
+    "mbt": "^1.2.49",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-purchaseorderapp": "cds watch --open mithra.app.purchaseorderapp/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy capm --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "build:cf": "ui5 build --clean-dest"
+  },
+  "private": true,
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/purchaseorderapp"
+  ],
+  "cds": {
+    "hana": {
+      "deploy-format": "hdbtable"
+    },
+    "requires": {
+      "uaa": {
+        "kind": "xsuaa"
+      },
+      "auth": {
+        "[production]": {
+          "strategy": "JWT"
+        },
+        "[development]": {
+          "strategy": "mock",
+          "users": {
+            "mithra": {
+              "roles": [
+                "Admin",
+                "Viewer"
+              ],
+              "userAttributes": {
+                "BankName": [
+                  "$UNRESTRICTED"
+                ]
+              }
+            },
+            "anitha": {
+              "roles": [
+                "Viewer"
+              ],
+              "userAttributes": {
+                "BankName": [
+                  "Axis Bank"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "[production]": {
+        "auth": {
+          "kind": "xsuaa"
+        }
+      },
+      "PurchaseOrder": {
+        "kind": "odata-v2",
+        "model": "srv/external/PurchaseOrder",
+        "[production]": {
+          "credentials": {
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "path": "s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV",
+            "url": "https://sandbox.api.sap.com",
+            "headers": {
+              "APIKey": "eSIKGvQFjlUfTe33nBpCFoNlU3HUTck6"
+            }
+          }
+        },
+        "csrf": true,
+        "csrfInBatch": true
+      }
+    }
+  }
+}

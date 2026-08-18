@@ -1,0 +1,2 @@
+sap.ui.define(["sap/fe/test/ListReport"],function(t){"use strict";const s={actions:{},assertions:{}};return new t({appId:"mithra.app.purchaseorderapp",componentId:"POsList",contextPath:"/POs"},s)});
+//# sourceMappingURL=POsList.gen.js.map
